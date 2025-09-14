@@ -134,8 +134,8 @@ export const Preview = memo(({ showTarget = false, challengeData }: PreviewProps
               <img
                 src={challengeData.image}
                 alt="Target result"
-                className="w-auto h-auto max-h-[92vh] object-contain bg-white"
-                style={{ maxWidth: '100%' }}
+                className="w-auto h-auto max-h-[98vh] max-w-[98vw] object-contain bg-white shadow-lg"
+                style={{ maxWidth: '98vw' }}
               />
               <div className="absolute bottom-4 right-4 text-white text-sm font-semibold opacity-70 bg-red-500/80 px-2 py-1 rounded flex items-center gap-1">
                 <div className="i-ph:warning" />

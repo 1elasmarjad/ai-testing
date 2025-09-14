@@ -16,10 +16,8 @@ export function ChallengeNavbar({
 }) {
   return (
     <nav className="w-full flex items-center justify-between px-6 py-3 bg-bolt-elements-background-depth-2 border-b border-bolt-elements-borderColor shadow z-50 relative">
-      <div className="flex items-center gap-3">
-        <div className="flex items-center h-full">
-          <BackToChallengesButton />
-        </div>
+      <div className="flex items-center h-full">
+        <BackToChallengesButton />
       </div>
       <div className="flex items-center gap-2">
         <button
@@ -29,9 +27,7 @@ export function ChallengeNavbar({
         >
           Submit
         </button>
-        <div className="flex items-center h-full">
-          <ChallengeTimer {...timerProps} challenge={challenge} />
-        </div>
+        <ChallengeTimer {...timerProps} challenge={challenge} />
       </div>
     </nav>
   );

@@ -32,7 +32,48 @@ export function ChallengeNavbar({
     }
   };
 
-  const handleSubmission = () => {
+  const handleSubmission = async () => {
+    let qualityScore = 50; // Default fallback score
+
+    try {
+      // Get the stored screenshot from proctoring service
+      const resultScreenshotBlob = proctoringService.getStoredScreenshotAsBlob();
+
+      if (resultScreenshotBlob && challenge?.id) {
+        // Get challenge data to access target image
+        const challengeData = await getChallengeById(challenge.id);
+
+        if (challengeData?.image) {
+          // Fetch the target image
+          const targetImageResponse = await fetch(challengeData.image);
+          const targetImageBlob = await targetImageResponse.blob();
+
+          // Prepare form data for API call
+          const formData = new FormData();
+          formData.append('targetScreenshot', targetImageBlob);
+          formData.append('resultScreenshot', resultScreenshotBlob);
+
+          // Call the grade-result API
+          const gradeResponse = await fetch('/api/grade-result', {
+            method: 'POST',
+            body: formData,
+          });
+
+          if (gradeResponse.ok) {
+            const gradeResult = await gradeResponse.json();
+            qualityScore = gradeResult.similarity || 50;
+            console.log('Grade result:', gradeResult);
+          } else {
+            console.error('Failed to grade result:', gradeResponse.statusText);
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error during grading process:', error);
+      // Use fallback score if anything fails
+    }
+
+    // Call parent onSubmission handler
     if (onSubmission) {
       await onSubmission();
     }

@@ -18,15 +18,15 @@ export function ChallengeNavbar({
     onExpire?: () => void;
   };
   onSubmit?: () => void;
-  onPreSubmission?: () => void;
+  onPreSubmission?: () => Promise<void>;
   onSubmission?: () => void;
 }) {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const navigate = useNavigate();
 
-  const handlePreSubmission = () => {
+  const handlePreSubmission = async () => {
     if (onPreSubmission) {
-      onPreSubmission();
+      await onPreSubmission();
     }
   };
 

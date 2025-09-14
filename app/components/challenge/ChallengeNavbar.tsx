@@ -88,10 +88,9 @@ export function ChallengeNavbar({
 
     // Use real quality score from API
     const promptScore = 5;
-    const speedScore = 5;
 
     // Redirect to landing page with real quality score
-    navigate(`/result?prompt_score=${promptScore}&quality_score=${qualityScore}&speed_score=${speedScore}`);
+    navigate(`/result?prompt_score=${promptScore}&quality_score=${qualityScore}`);
   };
 
   const handleSubmitClick = () => {

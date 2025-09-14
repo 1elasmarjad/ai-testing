@@ -10,9 +10,8 @@ export const loader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url);
   const promptScore = url.searchParams.get('prompt_score') || '0';
   const qualityScore = url.searchParams.get('quality_score') || '0';
-  const speedScore = url.searchParams.get('speed_score') || '0';
 
-  return { promptScore, qualityScore, speedScore };
+  return { promptScore, qualityScore };
 };
 
 interface PerformanceScaleProps {
@@ -58,30 +57,37 @@ function PerformanceScale({ level, title, className = '' }: PerformanceScaleProp
 }
 
 export default function ResultPage() {
-  const { promptScore, qualityScore, speedScore } = useLoaderData<{
+  const { promptScore, qualityScore } = useLoaderData<{
     promptScore: string;
     qualityScore: string;
-    speedScore: string;
   }>();
 
   // Convert strings to numbers
   const prompt = parseInt(promptScore) || 0;
   const quality = parseInt(qualityScore) || 0;
-  const speed = parseInt(speedScore) || 0;
 
   // Normalize scores to 0-1 range
   const normalizedPrompt = Math.min(prompt / 5, 1);
   const normalizedQuality = Math.min(quality / 100, 1);
-  const normalizedSpeed = Math.min(speed / 5, 1);
 
-  // Calculate overall average and convert to 1-5 scale
-  const overallAverage = (normalizedPrompt + normalizedQuality + normalizedSpeed) / 3;
+  // Calculate overall average and convert to 1-5 scale (only 2 scores now)
+  const overallAverage = (normalizedPrompt + normalizedQuality) / 2;
   const overallLevel = Math.max(1, Math.round(overallAverage * 5));
 
   // Convert individual scores to 1-5 scale for individual displays
   const promptLevel = Math.max(1, Math.round(normalizedPrompt * 5));
   const qualityLevel = Math.max(1, Math.round(normalizedQuality * 5));
-  const speedLevel = Math.max(1, Math.round(normalizedSpeed * 5));
+
+  // Performance blurbs based on overall level
+  const performanceBlurbs = {
+    1: "Weak frontend and poor AI usage, struggled to make progress.",
+    2: "Some grasp of frontend or AI tools, but couldn't combine them effectively.",
+    3: "Got a working result by leaning on AI, with basic frontend execution.",
+    4: "Solid frontend build with smart, consistent use of AI support.",
+    5: "Strong frontend craft and expert AI prompting, delivering a polished, efficient solution."
+  };
+
+  const currentBlurb = performanceBlurbs[overallLevel as keyof typeof performanceBlurbs] || performanceBlurbs[3];
 
   return (
     <div className="flex flex-col h-full min-h-screen w-full bg-bolt-elements-background-depth-1">
@@ -98,12 +104,15 @@ export default function ResultPage() {
               <PerformanceScale
                 level={overallLevel}
                 title="Overall Performance"
-                className="mb-2"
+                className="mb-4"
               />
+              <p className="text-center text-bolt-elements-textSecondary italic mt-4">
+                {currentBlurb}
+              </p>
             </div>
 
             {/* Individual Score Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
               <div className="bg-bolt-elements-background-depth-1 rounded-xl border border-bolt-elements-borderColor p-6 text-center">
                 <h2 className="text-lg font-semibold text-bolt-elements-textSecondary mb-2">Prompt Score</h2>
                 <div className="text-3xl font-bold text-blue-500 mb-4">{promptScore}/5</div>
@@ -112,11 +121,6 @@ export default function ResultPage() {
               <div className="bg-bolt-elements-background-depth-1 rounded-xl border border-bolt-elements-borderColor p-6 text-center">
                 <h2 className="text-lg font-semibold text-bolt-elements-textSecondary mb-2">Quality Score</h2>
                 <div className="text-3xl font-bold text-green-500 mb-4">{qualityScore}%</div>
-              </div>
-
-              <div className="bg-bolt-elements-background-depth-1 rounded-xl border border-bolt-elements-borderColor p-6 text-center">
-                <h2 className="text-lg font-semibold text-bolt-elements-textSecondary mb-2">Speed Score</h2>
-                <div className="text-3xl font-bold text-yellow-500 mb-4">{speedScore}/5</div>
               </div>
             </div>
 

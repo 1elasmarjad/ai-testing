@@ -9,7 +9,6 @@ import { Link, useLocation } from '@remix-run/react';
 export function Header({ className = '' }: { className?: string } = {}) {
   const chat = useStore(chatStore);
   const location = useLocation();
-  const isOnChatPage = location.pathname.startsWith('/chat/');
 
   return (
     <header
@@ -17,24 +16,25 @@ export function Header({ className = '' }: { className?: string } = {}) {
         'flex flex-col bg-bolt-elements-background-depth-1 p-0 border-b h-[var(--header-height)] z-10',
         className,
         {
-          'flex-col items-center': !isOnChatPage,
-          'flex-row items-center': isOnChatPage,
           'border-transparent': !chat.started,
           'border-bolt-elements-borderColor': chat.started,
         },
       )}
     >
-      {/* Navbar - hidden on chat pages */}
-      {!isOnChatPage && (
-        <nav className="flex gap-2 justify-center w-full">
+      <div className="flex items-center w-full max-w-6xl mx-auto justify-between pt-8 pb-8 px-6 min-h-[72px]">
+        <nav className="flex gap-0 justify-center flex-1">
           <Link
             to="/"
             className={classNames(
-              'px-4 py-2 rounded text-bolt-elements-textPrimary hover:bg-bolt-elements-background-depth-2 transition',
+              'px-6 py-2 rounded-l text-bolt-elements-textPrimary hover:bg-bolt-elements-background-depth-2 transition relative',
               { 'bg-bolt-elements-background-depth-2 font-bold': location.pathname === '/' },
             )}
           >
-            Solve
+            Challenges
+            <span
+              className="absolute right-0 top-1/2 -translate-y-1/2 h-6 w-px bg-bolt-elements-borderColor"
+              style={{ pointerEvents: 'none' }}
+            />
           </Link>
           <Link
             to="/profile"
@@ -47,48 +47,18 @@ export function Header({ className = '' }: { className?: string } = {}) {
             Profile
           </Link>
         </nav>
-      )}
-
-      {/* Content area - different layout for chat vs non-chat pages */}
-      {isOnChatPage ? (
-        // Chat page: horizontal layout with home button
-        <>
-          <Link
-            to="/"
-            className="flex items-center p-2 text-bolt-elements-textSecondary hover:text-bolt-elements-textPrimary hover:bg-bolt-elements-background-depth-2 rounded-md transition-colors"
-            title="Go Home"
-          >
-            <div className="i-ph:arrow-left text-lg" />
-          </Link>
-          <span className="flex-1 px-4 truncate text-center text-bolt-elements-textPrimary">
-            <ClientOnly>{() => <ChatDescription />}</ClientOnly>
-          </span>
-          {chat.started && (
-            <ClientOnly>
-              {() => (
-                <div className="ml-auto">
-                  <HeaderActionButtons />
-                </div>
-              )}
-            </ClientOnly>
+      </div>
+      <span className="flex-1 px-4 truncate text-center text-bolt-elements-textPrimary">
+        <ClientOnly>{() => <ChatDescription />}</ClientOnly>
+      </span>
+      {chat.started && (
+        <ClientOnly>
+          {() => (
+            <div className="mr-1">
+              <HeaderActionButtons />
+            </div>
           )}
-        </>
-      ) : (
-        // Non-chat pages: content row below navbar
-        <div className="flex items-center justify-between w-full">
-          <span className="flex-1 px-4 truncate text-center text-bolt-elements-textPrimary">
-            <ClientOnly>{() => <ChatDescription />}</ClientOnly>
-          </span>
-          {chat.started && (
-            <ClientOnly>
-              {() => (
-                <div className="mr-1">
-                  <HeaderActionButtons />
-                </div>
-              )}
-            </ClientOnly>
-          )}
-        </div>
+        </ClientOnly>
       )}
     </header>
   );

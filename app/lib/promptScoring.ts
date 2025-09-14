@@ -85,8 +85,8 @@ export class PromptScoringService {
     const sum = session.scores.reduce((acc, score) => acc + score, 0);
     const average = sum / session.scores.length;
 
-    // Round to 1 decimal place
-    return Math.round(average * 10) / 10;
+    // Round up to 1 decimal place
+    return Math.ceil(average * 10) / 10;
   }
 
   /**

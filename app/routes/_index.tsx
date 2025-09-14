@@ -1,22 +1,9 @@
 import { json, type MetaFunction } from '@remix-run/cloudflare';
-import { ClientOnly } from 'remix-utils/client-only';
-import { BaseChat } from '~/components/chat/BaseChat';
-import { Chat } from '~/components/chat/Chat.client';
 import { Header } from '~/components/header/Header';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ChallengeCard } from '~/components/challenge/ChallengeCard';
 import { useNavigate, useLoaderData } from '@remix-run/react';
 import challengesData from '../../data/challenges.json';
-
-type Challenge = {
-  id: string;
-  title: string;
-  image: string;
-  difficulty: 'Easy' | 'Medium' | 'Hard';
-  question: string;
-  averageAccuracy?: number;
-};
-
 
 const difficultyOptions = ['All', 'Easy', 'Medium', 'Hard'] as const;
 const sortOptions = [
@@ -43,7 +30,7 @@ export default function Index() {
     (c) =>
       (difficulty === 'All' || c.difficulty === difficulty) &&
       (c.title.toLowerCase().includes(search.toLowerCase()) ||
-        c.question.toLowerCase().includes(search.toLowerCase())),
+        c.title.toLowerCase().includes(search.toLowerCase())),
   );
   const sorted = [...filtered].sort((a, b) => {
     if (sort === 'title') {
@@ -140,6 +127,7 @@ export default function Index() {
               <ChallengeCard
                 key={challenge.id}
                 {...challenge}
+                difficulty={challenge.difficulty as 'Easy' | 'Medium' | 'Hard'}
                 onClick={() =>
                   navigate(`/challenge/${challenge.id}`, {
                     state: {

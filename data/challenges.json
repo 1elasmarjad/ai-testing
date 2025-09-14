@@ -25,8 +25,7 @@
     "title": "Profile Page",
     "image": "/profile.jpg",
     "difficulty": "Hard",
-    "averageAccuracy": 74,
-    "description": "Determine whether an integer is a palindrome."
+    "averageAccuracy": 74
   },
   {
     "id": "counter",
@@ -40,7 +39,6 @@
     "title": "Weather Forecast",
     "image": "/weather-app.png",
     "difficulty": "Medium",
-    "averageAccuracy": 41,
-    "description": "Place N queens on an N×N chessboard so that no two queens threaten each other."
+    "averageAccuracy": 41
   }
 ]

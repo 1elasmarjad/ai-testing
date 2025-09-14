@@ -1,9 +1,9 @@
 export interface Challenge {
   id: string;
   title: string;
-  question: string;
   image: string;
   difficulty: 'Easy' | 'Medium' | 'Hard';
+  averageAccuracy: number;
 }
 
 let challengesCache: Challenge[] | null = null;

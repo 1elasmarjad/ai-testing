@@ -8,6 +8,7 @@ import { useAudio, useMessageParser, useShortcuts, useSnapScroll } from '~/lib/h
 import { useChatHistory, type ChatHistoryItem } from '~/lib/persistence';
 import { chatStore } from '~/lib/stores/chat';
 import { workbenchStore } from '~/lib/stores/workbench';
+import { getChallengeContext, addPromptScore } from '~/lib/challengeSession';
 import { fileModificationsToHTML } from '~/utils/diff';
 import { cubicEasingFn } from '~/utils/easings';
 import { createScopedLogger, renderLogger } from '~/utils/logger';
@@ -213,6 +214,13 @@ export const ChatImpl = memo(({ initialMessages, storeMessageHistory, chatData }
       .then((data: any) => {
         const message = data.message || 'Prompt evaluated';
         const rating = data.rating || 3;
+
+        // Store the prompt score if we're in a challenge context
+        const challengeContext = getChallengeContext();
+        if (challengeContext) {
+          addPromptScore(challengeContext.challengeId, rating);
+        }
+
         sendPromptStatusToast(message, rating, playSuccess, playFailure);
       })
       .catch((error) => {

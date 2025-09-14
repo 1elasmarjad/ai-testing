@@ -5,6 +5,7 @@ import { ChallengeTimer } from './ChallengeTimer';
 import { SubmissionConfirmation } from './SubmissionConfirmation';
 import { getChallengeById } from '~/lib/challenges';
 import { proctoringService } from '~/lib/proctoring';
+import { getAveragePromptScore } from '~/lib/challengeSession';
 
 export function ChallengeNavbar({
   challenge,
@@ -86,10 +87,10 @@ export function ChallengeNavbar({
       window.dispatchEvent(new CustomEvent('challenge:submit', { detail: { id: challenge.id } }));
     }
 
-    // Use real quality score from API
-    const promptScore = 5;
+    // Get calculated average prompt score (rounded to 1 decimal place)
+    const promptScore = getAveragePromptScore(challenge.id);
 
-    // Redirect to landing page with real quality score
+    // Redirect to landing page with real quality score and calculated prompt score
     navigate(`/result?prompt_score=${promptScore}&quality_score=${qualityScore}`);
   };
 

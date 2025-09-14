@@ -1,4 +1,5 @@
 import { type Challenge } from './challenges';
+import { promptScoringService } from './promptScoring';
 
 interface ChallengeSession {
   challengeId: string;
@@ -107,4 +108,16 @@ export function clearProctoringSession(): void {
   } catch (error) {
     console.warn('Failed to clear proctoring session in session storage:', error);
   }
+}
+
+export function addPromptScore(challengeId: string, score: number): void {
+  promptScoringService.addPromptScore(challengeId, score);
+}
+
+export function getAveragePromptScore(challengeId: string): number {
+  return promptScoringService.getAveragePromptScore(challengeId);
+}
+
+export function clearPromptScores(challengeId: string): void {
+  promptScoringService.clearScores(challengeId);
 }

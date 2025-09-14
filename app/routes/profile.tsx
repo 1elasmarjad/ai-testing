@@ -97,9 +97,7 @@ export default function ProfilePage() {
               <h1 className="text-bolt-elements-textPrimary text-4xl font-extrabold mb-1 tracking-tight">
                 {userStats.name}
               </h1>
-              <div className="text-bolt-elements-textSecondary text-lg mb-2">
-                <span className="font-bold text-bolt-elements-textPrimary">{getRank(userStats.solved)}</span>
-              </div>
+              <div className="text-bolt-elements-textSecondary text-lg mb-2"></div>
               <div className="flex items-center gap-2 mb-2">
                 <span className="bg-green-100 text-green-700 text-xs font-semibold px-2 py-1 rounded">Active</span>
                 <span className="text-bolt-elements-textSecondary text-xs">Member since 2024</span>

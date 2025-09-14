@@ -57,6 +57,8 @@ export default function Challenge() {
 
   const handleSubmission = () => {
     if (isProctoringActive) {
+      // Download the stored screenshot before stopping screen share
+      proctoringService.downloadStoredScreenshot(challenge.id);
       proctoringService.stopScreenShare();
     }
 

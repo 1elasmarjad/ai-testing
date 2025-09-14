@@ -7,6 +7,7 @@ export interface ProctoringState {
 class ProctoringService {
   private stream: MediaStream | null = null;
   private isActive: boolean = false;
+  private storedScreenshot: Blob | null = null;
 
   async startScreenShare(): Promise<{ success: boolean; error?: string }> {
     try {
@@ -69,8 +70,8 @@ class ProctoringService {
               return;
             }
 
-            // Immediately download the screenshot
-            this.downloadScreenshot(blob, challengeId);
+            // Store the screenshot instead of downloading immediately
+            this.storedScreenshot = blob;
             resolve({ success: true });
           }, 'image/png');
         });
@@ -81,23 +82,34 @@ class ProctoringService {
     }
   }
 
-  private downloadScreenshot(blob: Blob, challengeId: string): void {
-    const timestamp = Date.now();
-    const filename = `proctoring-screenshot-${challengeId}-${timestamp}.png`;
+  downloadStoredScreenshot(challengeId: string): { success: boolean; error?: string } {
+    if (!this.storedScreenshot) {
+      return { success: false, error: 'No screenshot stored' };
+    }
 
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
+    try {
+      const timestamp = Date.now();
+      const filename = `proctoring-screenshot-${challengeId}-${timestamp}.png`;
 
-    link.href = url;
-    link.download = filename;
-    link.style.display = 'none';
+      const url = URL.createObjectURL(this.storedScreenshot);
+      const link = document.createElement('a');
 
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+      link.href = url;
+      link.download = filename;
+      link.style.display = 'none';
 
-    // Clean up the object URL
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      // Clean up the object URL
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+      return { success: true };
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to download screenshot';
+      return { success: false, error: errorMessage };
+    }
   }
 
   stopScreenShare(): void {
@@ -106,6 +118,7 @@ class ProctoringService {
       this.stream = null;
     }
     this.isActive = false;
+    this.storedScreenshot = null; // Clear stored screenshot
   }
 
   getState(): ProctoringState {
@@ -118,6 +131,10 @@ class ProctoringService {
 
   isScreenSharingActive(): boolean {
     return this.isActive && this.stream !== null;
+  }
+
+  hasStoredScreenshot(): boolean {
+    return this.storedScreenshot !== null;
   }
 }
 

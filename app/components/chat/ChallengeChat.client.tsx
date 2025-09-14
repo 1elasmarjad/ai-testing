@@ -2,7 +2,7 @@ import { useStore } from '@nanostores/react';
 import type { Message } from 'ai';
 import { useChat } from 'ai/react';
 import { useAnimate } from 'framer-motion';
-import { memo, useEffect, useRef, useState } from 'react';
+import { useRef, useEffect, useState, memo } from 'react';
 import { cssTransition, toast, ToastContainer } from 'react-toastify';
 import { useMessageParser, useShortcuts, useSnapScroll } from '~/lib/hooks';
 import { useChatHistory } from '~/lib/persistence';
@@ -148,9 +148,7 @@ export const ChallengeChatImpl = memo(({ challenge, initialMessages, storeMessag
       return;
     }
 
-    await Promise.all([
-      animate('#challenge-intro', { opacity: 0, flex: 1 }, { duration: 0.2, ease: cubicEasingFn }),
-    ]);
+    await Promise.all([animate('#challenge-intro', { opacity: 0, flex: 1 }, { duration: 0.2, ease: cubicEasingFn })]);
 
     chatStore.setKey('started', true);
 
@@ -164,7 +162,7 @@ export const ChallengeChatImpl = memo(({ challenge, initialMessages, storeMessag
       return;
     }
 
-    // Store challenge context when first message is sent
+    // store challenge context when first message is sent
     if (messages.length === 0) {
       setChallengeContext(challenge.id, challenge);
     }
@@ -212,30 +210,76 @@ export const ChallengeChatImpl = memo(({ challenge, initialMessages, storeMessag
 
   const [messageRef, scrollRef] = useSnapScroll();
 
-  return (
-    <ChallengeChatBase
-      ref={animationScope}
-      challenge={challenge}
-      textareaRef={textareaRef}
-      input={input}
-      showChat={showChat}
-      chatStarted={chatStarted}
-      isStreaming={isLoading}
-      sendMessage={sendMessage}
-      messageRef={messageRef}
-      scrollRef={scrollRef}
-      handleInputChange={handleInputChange}
-      handleStop={abort}
-      messages={messages.map((message, i) => {
-        if (message.role === 'user') {
-          return message;
-        }
+  const [timer, setTimer] = useState(20 * 60); // 20 minutes in seconds
+  const [timerActive, setTimerActive] = useState(false);
 
-        return {
-          ...message,
-          content: parsedMessages[i] || '',
-        };
-      })}
-    />
+  // start timer when chatStarted becomes true for the first time
+  useEffect(() => {
+    if (chatStarted && !timerActive) {
+      setTimerActive(true);
+    }
+  }, [chatStarted, timerActive]);
+
+  // countdown effect
+  useEffect(() => {
+    if (!timerActive) {
+      return;
+    }
+
+    if (timer <= 0) {
+      return;
+    }
+
+    const interval = setInterval(() => {
+      setTimer((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [timerActive, timer]);
+
+  // format timer as MM:SS
+  const formatTimer = (seconds: number) => {
+    const m = Math.floor(seconds / 60)
+      .toString()
+      .padStart(2, '0');
+    const s = (seconds % 60).toString().padStart(2, '0');
+
+    return `${m}:${s}`;
+  };
+
+  return (
+    <div>
+      {chatStarted && timerActive && timer > 0 && (
+        <div className="fixed top-4 right-4 z-50 bg-bolt-elements-background-depth-2 text-bolt-elements-textPrimary px-6 py-3 rounded-lg shadow-lg text-2xl font-bold border border-bolt-elements-borderColor">
+          Time Left: {formatTimer(timer)}
+        </div>
+      )}
+      <ChallengeChatBase
+        ref={animationScope}
+        challenge={challenge}
+        textareaRef={textareaRef}
+        input={input}
+        showChat={showChat}
+        chatStarted={chatStarted}
+        isStreaming={isLoading}
+        sendMessage={sendMessage}
+        messageRef={messageRef}
+        scrollRef={scrollRef}
+        handleInputChange={handleInputChange}
+        handleStop={abort}
+        messages={messages.map((message, i) => {
+          if (message.role === 'user') {
+            return message;
+          }
+
+          return {
+            ...message,
+            content: parsedMessages[i] || '',
+          };
+        })}
+      />
+    </div>
   );
 });

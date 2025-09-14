@@ -1,5 +1,5 @@
 import { type MetaFunction, type LoaderFunction } from '@remix-run/cloudflare';
-import { useLoaderData } from '@remix-run/react';
+import { Link, useLoaderData } from '@remix-run/react';
 import { Header } from '~/components/header/Header';
 
 export const meta: MetaFunction = () => {
@@ -120,14 +120,14 @@ export default function ResultPage() {
               </div>
             </div>
 
-            {/* Go to Home Button */}
+            {/* Go to Home Link */}
             <div className="text-center">
-              <button
-                onClick={() => window.location.href = '/'}
-                className="bg-bolt-elements-button-primary-background hover:bg-bolt-elements-button-primary-backgroundHover text-bolt-elements-button-primary-text font-semibold py-3 px-8 rounded-lg shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-bolt-elements-accent/60 transform hover:scale-105"
+              <Link
+                to="/"
+                className="inline-block bg-bolt-elements-button-primary-background hover:bg-bolt-elements-button-primary-backgroundHover text-bolt-elements-button-primary-text font-semibold py-3 px-8 rounded-lg shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-bolt-elements-accent/60 transform hover:scale-105"
               >
                 Go to Home
-              </button>
+              </Link>
             </div>
           </div>
         </div>

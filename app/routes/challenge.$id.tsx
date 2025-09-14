@@ -24,7 +24,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
     throw new Response('Challenge not found', { status: 404 });
   }
 
-  return json({ challenge });
+  return { challenge };
 }
 
 export default function Challenge() {
@@ -32,7 +32,7 @@ export default function Challenge() {
 
   return (
     <div className="flex flex-col h-full min-h-screen w-full bg-bolt-elements-background-depth-1">
-      <Header className="bg-bolt-elements-background-depth-2 shadow-md" />
+      {/* <Header className="bg-bolt-elements-background-depth-2 shadow-md" /> */}
       <div className="flex flex-col items-center justify-center w-full max-w-3xl mx-auto mt-12 mb-0 p-0">
         {challenge.image && (
           <div className="w-full flex flex-col items-center justify-center mb-0">

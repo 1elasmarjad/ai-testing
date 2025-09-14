@@ -102,7 +102,7 @@ export default function Index() {
                 <h1 className="text-5xl font-extrabold text-white tracking-tight drop-shadow-lg mb-2 leading-tight text-center md:text-left">
                   Solve Challenges
                 </h1>
-                <p className="text-lg text-white/80 font-medium mt-0 drop-shadow-sm text-center md:text-left">
+                <p className="text-lg text-white/80 font-medium mt-0 drop-shadow-sm text-center md:text-left pb-6">
                   Browse and solve interactive UI challenges to sharpen your frontend skills.
                 </p>
               </div>
@@ -113,7 +113,7 @@ export default function Index() {
               />
             </div>
           </div>
-          <div className="mb-8 bg-bolt-elements-background-depth-2 rounded-xl border border-bolt-elements-borderColor shadow-lg p-6 w-full max-w-4xl mx-auto transition-all duration-200">
+          <div className="mb-8 bg-bolt-elements-background-depth-2 rounded-xl border border-bolt-elements-borderColor shadow-lg p-6 w-full max-w-4xl mx-auto transition-all duration-200 mt-20">
             <input
               type="text"
               placeholder="Search challenges..."
@@ -122,6 +122,7 @@ export default function Index() {
               className="w-full rounded-lg px-6 py-4 border-0 bg-bolt-elements-background-depth-1 text-bolt-elements-textPrimary focus:outline-none focus:ring-2 focus:ring-bolt-elements-accent/60 transition shadow-md text-xl font-medium placeholder:text-bolt-elements-textSecondary"
             />
           </div>
+          <div className="mb-4" />
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full">
             {filtered.map((challenge) => (
               <ChallengeCard
@@ -130,6 +131,7 @@ export default function Index() {
                 onClick={() =>
                   navigate('/challenge/counter', {
                     state: {
+                      id: challenge.id,
                       image: challenge.image,
                       title: challenge.title,
                       difficulty: challenge.difficulty,

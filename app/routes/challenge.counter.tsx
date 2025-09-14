@@ -7,26 +7,27 @@ import { useState } from 'react';
 
 export default function ChallengeCounter() {
   const location = useLocation();
-  const { image, title, difficulty } = location.state || {};
+  const { id, image, title, difficulty } = location.state || {};
 
   const challenge = {
-    id: 'counter-ui',
+    id: id || 'counter-ui',
     title: title || 'Build a Counter',
     question: '',
     image: image || '',
     difficulty: difficulty || 'Easy',
   };
 
-  // Add solved state
+  // Use sessionStorage for solved state
   const [solved, setSolved] = useState(() => {
     if (typeof window !== 'undefined') {
-      return localStorage.getItem(`solved-${challenge.id}`) === 'true';
+      return sessionStorage.getItem(`solved-${challenge.id}`) === 'true';
     }
+
     return false;
   });
 
   const handleSubmit = () => {
-    localStorage.setItem(`solved-${challenge.id}`,'true');
+    sessionStorage.setItem(`solved-${challenge.id}`, 'true');
     setSolved(true);
   };
 
@@ -64,7 +65,9 @@ export default function ChallengeCounter() {
               </button>
             )}
             {solved && (
-              <span className="mt-4 px-6 py-2 bg-green-900 text-white rounded-lg font-bold text-lg shadow">Submitted!</span>
+              <span className="mt-4 px-6 py-2 bg-green-900 text-white rounded-lg font-bold text-lg shadow">
+                Submitted!
+              </span>
             )}
           </div>
         )}

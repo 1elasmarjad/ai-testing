@@ -13,36 +13,43 @@ export function Header({ className = '' }: { className?: string } = {}) {
   return (
     <header
       className={classNames(
-        'flex flex-col bg-bolt-elements-background-depth-1 p-0 border-b h-[var(--header-height)] z-10',
+        'w-full bg-bolt-elements-background-depth-1 border-b border-bolt-elements-borderColor shadow-sm z-20',
         className,
-        {
-          'border-transparent': !chat.started,
-          'border-bolt-elements-borderColor': chat.started,
-        },
       )}
     >
-      <div className="flex items-center w-full max-w-6xl mx-auto justify-between pt-8 pb-8 px-6 min-h-[72px]">
-        <nav className="flex gap-0 justify-center flex-1">
+      <div className="flex items-center justify-between max-w-6xl mx-auto px-6 py-3">
+        {/* Logo and brand */}
+        <Link to="/" className="flex items-center gap-3 group">
+          <img
+            src="/logoooo-removebg-preview.png"
+            alt="Promptly Logo"
+            className="h-10 w-10 object-contain rounded-full bg-white/80 shadow group-hover:scale-105 transition-transform"
+          />
+          <span className="text-2xl font-extrabold tracking-tight text-bolt-elements-textPrimary group-hover:text-bolt-elements-accent transition-colors select-none">
+            Promptly
+          </span>
+        </Link>
+        {/* Navigation */}
+        <nav className="flex items-center gap-2 md:gap-6 text-base font-semibold">
           <Link
             to="/"
             className={classNames(
-              'px-6 py-2 rounded-l text-bolt-elements-textPrimary hover:bg-bolt-elements-background-depth-2 transition relative',
-              { 'bg-bolt-elements-background-depth-2 font-bold': location.pathname === '/' },
+              'px-4 py-2 rounded-md transition-colors',
+              location.pathname === '/'
+                ? 'bg-bolt-elements-background-depth-2 text-bolt-elements-accent shadow'
+                : 'text-bolt-elements-textPrimary hover:bg-bolt-elements-background-depth-2/70',
             )}
           >
             Challenges
-            <span
-              className="absolute right-0 top-1/2 -translate-y-1/2 h-6 w-px bg-bolt-elements-borderColor"
-              style={{ pointerEvents: 'none' }}
-            />
           </Link>
           <Link
             to="/profile"
             className={classNames(
-              'px-6 py-2 rounded-r text-bolt-elements-textPrimary hover:bg-bolt-elements-background-depth-2 transition',
-              { 'bg-bolt-elements-background-depth-2 font-bold': location.pathname === '/profile' },
+              'px-4 py-2 rounded-md transition-colors',
+              location.pathname === '/profile'
+                ? 'bg-bolt-elements-background-depth-2 text-bolt-elements-accent shadow'
+                : 'text-bolt-elements-textPrimary hover:bg-bolt-elements-background-depth-2/70',
             )}
-            style={{ borderRadius: '0 0.5rem 0.5rem 0', borderBottom: 'none', borderTop: 'none' }}
           >
             Profile
           </Link>

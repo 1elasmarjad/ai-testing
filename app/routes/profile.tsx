@@ -1,6 +1,7 @@
 import { Header } from '~/components/header/Header';
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { WeeklyActivityChart } from '~/components/profile/WeeklyActivityChart';
+import { ChallengeCard } from '~/components/challenge/ChallengeCard';
 
 // dummy data for demonstration
 const userStats = {
@@ -54,6 +55,34 @@ export default function ProfilePage() {
     { week: 'Week 6', count: 6 },
     { week: 'Week 7', count: 8 },
   ];
+
+  // Get solved challenge IDs from sessionStorage
+  const [solvedChallenges, setSolvedChallenges] = useState<string[]>([]);
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const solved: string[] = [];
+
+      for (let i = 0; i < sessionStorage.length; i++) {
+        const key = sessionStorage.key(i);
+
+        if (key && key.startsWith('solved-') && sessionStorage.getItem(key) === 'true') {
+          solved.push(key.replace('solved-', ''));
+        }
+      }
+      setSolvedChallenges(solved);
+    }
+  }, []);
+
+  // Import challenges list from _index.tsx (copy here for now)
+  const challenges = [
+    { id: '1', title: 'Sales Dashboard', image: '/sales-dashboard.png', difficulty: 'Hard', averageAccuracy: 62 },
+    { id: '2', title: 'Login Box', image: '/login.png', difficulty: 'Medium', averageAccuracy: 91 },
+    { id: '3', title: 'Google Drive', image: '/Folders.png', difficulty: 'Medium', averageAccuracy: 87 },
+    { id: '4', title: 'Profile Page', image: '/profile.jpg', difficulty: 'Hard', averageAccuracy: 74 },
+    { id: '5', title: 'Counter', image: '/counter.gif', difficulty: 'Easy', averageAccuracy: 68 },
+    { id: '6', title: 'Weather Forecast', image: '/weather-app.png', difficulty: 'Medium', averageAccuracy: 41 },
+  ];
+  const solvedChallengeData = challenges.filter((c) => solvedChallenges.includes(c.id));
 
   return (
     <div className="flex flex-col h-full min-h-screen w-full bg-bolt-elements-background-depth-1">
@@ -149,8 +178,17 @@ export default function ProfilePage() {
           </div>
           {/* Progress section */}
           <div className="px-10 py-10 bg-bolt-elements-background-depth-1 flex flex-col items-center justify-center">
-            {/* Add more detail: stats table */}
-            {/* Statistics table removed as it's now shown beside the chart */}
+            {/* Solved Challenges Section */}
+            <h2 className="text-2xl font-bold text-white mb-4">Solved Challenges</h2>
+            {solvedChallengeData.length === 0 ? (
+              <div className="text-white/70">No challenges solved yet.</div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full max-w-3xl mx-auto">
+                {solvedChallengeData.map((challenge) => (
+                  <ChallengeCard key={challenge.id} {...challenge} />
+                ))}
+              </div>
+            )}
           </div>
         </section>
       </main>

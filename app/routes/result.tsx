@@ -111,7 +111,7 @@ export default function ResultPage() {
 
               <div className="bg-bolt-elements-background-depth-1 rounded-xl border border-bolt-elements-borderColor p-6 text-center">
                 <h2 className="text-lg font-semibold text-bolt-elements-textSecondary mb-2">Quality Score</h2>
-                <div className="text-3xl font-bold text-green-500 mb-4">{qualityScore}/100</div>
+                <div className="text-3xl font-bold text-green-500 mb-4">{qualityScore}%</div>
               </div>
 
               <div className="bg-bolt-elements-background-depth-1 rounded-xl border border-bolt-elements-borderColor p-6 text-center">

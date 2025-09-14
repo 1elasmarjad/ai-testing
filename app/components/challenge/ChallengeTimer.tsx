@@ -70,8 +70,6 @@ export function ChallengeTimer({
       onSubmission();
     }
 
-    console.log(`Challenge: ${JSON.stringify(challenge)}`)
-
     // Always execute the default submission logic
     if (challenge?.id) {
       localStorage.setItem(`challenge-solved-${challenge.id}`, '1');
@@ -79,6 +77,9 @@ export function ChallengeTimer({
     }
 
     // TODO get the users mark here
+    const promptScore = 5;
+    const qualityScore = 100;
+    const speedScore = 5;
 
     // Redirect to landing page
     navigate('/result?prompt_score=5&quality_score=100&speed_score=5');

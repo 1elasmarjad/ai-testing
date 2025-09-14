@@ -1,4 +1,3 @@
-import React from 'react';
 import { BackToChallengesButton } from './BackToChallengesButton';
 import { ChallengeTimer } from './ChallengeTimer';
 

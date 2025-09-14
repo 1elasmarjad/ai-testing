@@ -91,8 +91,8 @@ export default function ProfilePage() {
           {/* Profile header removed */}
           <div className="flex flex-col md:flex-row items-center md:items-end gap-8 md:gap-16 px-10 pt-12 pb-8 border-b border-bolt-elements-borderColor bg-bolt-elements-background-depth-2">
             <div className="flex flex-col items-center md:items-start">
-              <div className="w-32 h-32 rounded-full bg-gradient-to-br from-green-400 via-yellow-400 to-red-400 flex items-center justify-center mb-4 shadow-xl border-4 border-white">
-                <span className="text-7xl font-extrabold text-white select-none">JB</span>
+              <div className="w-36 h-36 rounded-full bg-gradient-to-br from-green-400 via-yellow-400 to-red-400 flex items-center justify-center mb-4 shadow-xl border-2 border-black overflow-hidden">
+                <img src="/headshot.JPG" alt="Profile headshot" className="w-full h-full object-cover rounded-full" />
               </div>
               <h1 className="text-bolt-elements-textPrimary text-4xl font-extrabold mb-1 tracking-tight">
                 {userStats.name}

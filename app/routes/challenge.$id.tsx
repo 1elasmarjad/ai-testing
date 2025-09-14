@@ -34,7 +34,7 @@ export default function Challenge() {
   const duration = challenge.difficulty === 'Easy' ? 10 * 60 : challenge.difficulty === 'Medium' ? 15 * 60 : 20 * 60;
 
   return (
-    <div className="flex flex-col h-full w-full relative">
+    <div className="w-full min-h-screen bg-bolt-elements-background-depth-1 flex flex-col">
       <ChallengeNavbar
         challenge={challenge}
         timerProps={{ start: true, duration }}
@@ -45,9 +45,11 @@ export default function Challenge() {
           }
         }}
       />
-      <ClientOnly fallback={<ChallengeChatFallback challenge={challenge} />}>
-        {() => <ChallengeChatClient challenge={challenge} />}
-      </ClientOnly>
+      <div className="flex-1 flex flex-col w-full">
+        <ClientOnly fallback={<ChallengeChatFallback challenge={challenge} />}>
+          {() => <ChallengeChatClient challenge={challenge} />}
+        </ClientOnly>
+      </div>
     </div>
   );
 }

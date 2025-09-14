@@ -7,7 +7,6 @@ import {
   type OnChangeCallback as OnEditorChange,
   type OnScrollCallback as OnEditorScroll,
 } from '~/components/editor/codemirror/CodeMirrorEditor';
-import { IconButton } from '~/components/ui/IconButton';
 import { PanelHeaderButton } from '~/components/ui/PanelHeaderButton';
 import { Slider, type SliderOptions } from '~/components/ui/Slider';
 import { workbenchStore, type WorkbenchViewType } from '~/lib/stores/workbench';
@@ -175,14 +174,6 @@ export const Workbench = memo(({ chatStarted, isStreaming }: WorkspaceProps) => 
                     Toggle Terminal
                   </PanelHeaderButton>
                 )}
-                <IconButton
-                  icon="i-ph:x-circle"
-                  className="-mr-1"
-                  size="xl"
-                  onClick={() => {
-                    workbenchStore.showWorkbench.set(false);
-                  }}
-                />
               </div>
               <div className="relative flex-1 overflow-hidden">
                 <View

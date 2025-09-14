@@ -40,7 +40,7 @@ export default function Index() {
   return (
     <div className="flex flex-col h-full w-full">
       <Header />
-      <div className="min-h-screen bg-bolt-elements-background-depth-1 py-10 px-4">
+      <div className="min-h-screen bg-bolt-elements-background-depth-1 py-16 px-4">
         <div className="max-w-6xl mx-auto">
           {/* Solve Challenges header */}
           <div
@@ -61,7 +61,7 @@ export default function Index() {
                 Solve Challenges
               </h1>
               <p className="text-lg text-white/80 font-medium mt-0 drop-shadow-sm text-center md:text-left pb-6">
-                Browse and solve interactive UI challenges to sharpen your frontend skills.
+                Browse and solve interactive UI challenges to sharpen your vibe coding skills.
               </p>
             </div>
             <img
@@ -72,7 +72,7 @@ export default function Index() {
           </div>
           {/* End of Solve Challenges header */}
           {/* Just a big search bar */}
-          <div className="mt-12 mb-8 bg-bolt-elements-background-depth-2 rounded-xl border border-bolt-elements-borderColor shadow-lg p-6 w-full max-w-4xl mx-auto transition-all duration-200">
+          <div className="mt-20 mb-8 bg-bolt-elements-background-depth-2 rounded-xl border border-bolt-elements-borderColor shadow-lg p-6 w-full max-w-4xl mx-auto transition-all duration-200">
             <div className="relative">
               <div className="absolute left-4 top-1/2 -translate-y-1/2 i-ph:magnifying-glass text-xl text-bolt-elements-textSecondary pointer-events-none" />
               <input

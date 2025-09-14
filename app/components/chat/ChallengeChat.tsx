@@ -70,7 +70,7 @@ export const ChallengeChat = React.forwardRef<HTMLDivElement, ChallengeChatProps
                 <img
                   src={challenge.image}
                   alt={challenge.title}
-                  className="mx-auto mb-6 rounded-lg shadow-md max-h-48"
+                  className="mx-auto mb-6 rounded-lg shadow-md max-h-80 max-w-full"
                 />
                 <div className="mb-4">
                   <h1 className="text-3xl text-white font-bold mb-4">{challenge.title}</h1>

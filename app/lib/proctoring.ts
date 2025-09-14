@@ -136,6 +136,10 @@ class ProctoringService {
   hasStoredScreenshot(): boolean {
     return this.storedScreenshot !== null;
   }
+
+  getStoredScreenshotAsBlob(): Blob | null {
+    return this.storedScreenshot;
+  }
 }
 
 // Export singleton instance

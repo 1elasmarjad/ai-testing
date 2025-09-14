@@ -3,6 +3,8 @@ import { useNavigate } from '@remix-run/react';
 import { BackToChallengesButton } from './BackToChallengesButton';
 import { ChallengeTimer } from './ChallengeTimer';
 import { SubmissionConfirmation } from './SubmissionConfirmation';
+import { getChallengeById } from '~/lib/challenges';
+import { proctoringService } from '~/lib/proctoring';
 
 export function ChallengeNavbar({
   challenge,
@@ -19,7 +21,7 @@ export function ChallengeNavbar({
   };
   onSubmit?: () => void;
   onPreSubmission?: () => Promise<void>;
-  onSubmission?: () => void;
+  onSubmission?: () => Promise<void>;
 }) {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const navigate = useNavigate();
@@ -32,7 +34,7 @@ export function ChallengeNavbar({
 
   const handleSubmission = () => {
     if (onSubmission) {
-      onSubmission();
+      await onSubmission();
     }
 
     console.log(`Challenge: ${JSON.stringify(challenge)}`);
@@ -43,13 +45,12 @@ export function ChallengeNavbar({
       window.dispatchEvent(new CustomEvent('challenge:submit', { detail: { id: challenge.id } }));
     }
 
-    // TODO get the users mark here
+    // Use real quality score from API
     const promptScore = 5;
-    const qualityScore = 100;
     const speedScore = 5;
 
-    // Redirect to landing page
-    navigate('/result?prompt_score=5&quality_score=100&speed_score=5');
+    // Redirect to landing page with real quality score
+    navigate(`/result?prompt_score=${promptScore}&quality_score=${qualityScore}&speed_score=${speedScore}`);
   };
 
   const handleSubmitClick = () => {

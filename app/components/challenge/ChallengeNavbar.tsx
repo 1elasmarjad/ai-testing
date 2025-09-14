@@ -60,6 +60,8 @@ export function ChallengeNavbar({
             body: formData,
           });
 
+          console.log(`Grade status ${gradeResponse.status}`)
+
           if (gradeResponse.ok) {
             const gradeResult = await gradeResponse.json();
             qualityScore = gradeResult.similarity || 50;

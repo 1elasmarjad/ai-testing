@@ -74,7 +74,7 @@ In your reasoning, be specific about what matches well and what differs. Mention
 
     // Call Gemini Vision API
     const result = await generateObject({
-      model: google('gemini-2.5-flash'),
+      model: google('gemini-2.5-pro'),
       system: systemPrompt,
       messages: [
         {

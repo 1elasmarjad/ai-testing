@@ -41,13 +41,13 @@ type Challenge = {
 export default function ProfilePage() {
   // example weekly activity data
   const weeklyActivity = [
-    { week: 'Week 1', count: 2 },
-    { week: 'Week 2', count: 5 },
-    { week: 'Week 3', count: 3 },
-    { week: 'Week 4', count: 7 },
-    { week: 'Week 5', count: 4 },
-    { week: 'Week 6', count: 6 },
-    { week: 'Week 7', count: 8 },
+    { week: 'Mon', count: 2 },
+    { week: 'Tue', count: 5 },
+    { week: 'Wed', count: 3 },
+    { week: 'Thu', count: 7 },
+    { week: 'Fri', count: 4 },
+    { week: 'Sat', count: 6 },
+    { week: 'Sun', count: 8 },
   ];
 
   // get solved challenge IDs from localStorage

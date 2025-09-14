@@ -12,9 +12,18 @@ export type ChallengeCardProps = {
 export function ChallengeCard({ id, title, image, difficulty, averageAccuracy, onClick }: ChallengeCardProps) {
   const difficultyColor =
     difficulty === 'Easy' ? 'text-green-500' : difficulty === 'Medium' ? 'text-yellow-500' : 'text-red-500';
+
+  // Check solved state from localStorage
+  const [solved, setSolved] = React.useState(false);
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setSolved(localStorage.getItem(`solved-${id}`) === 'true');
+    }
+  }, [id]);
+
   return (
     <div
-      className="cursor-pointer bg-bolt-elements-background-depth-2 rounded-lg shadow border border-bolt-elements-borderColor hover:shadow-lg transition flex flex-col overflow-hidden group w-full max-w-xs mx-auto"
+      className="cursor-pointer bg-bolt-elements-background-depth-2 rounded-lg shadow border border-bolt-elements-borderColor hover:shadow-lg transition flex flex-col overflow-hidden group w-full max-w-xs mx-auto relative"
       onClick={onClick}
       tabIndex={0}
       role="button"
@@ -44,6 +53,8 @@ export function ChallengeCard({ id, title, image, difficulty, averageAccuracy, o
           </div>
         </div>
       </div>
+      {/* Remove solved overlay/label if solved */}
+      {/* If you want to show an overlay for unsolved, you can add it here */}
     </div>
   );
 }

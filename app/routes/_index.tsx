@@ -82,11 +82,11 @@ export default function Index() {
   return (
     <div className="min-h-screen w-full bg-bolt-elements-background-depth-1 flex flex-col">
       <Header />
-      <main className="flex-1 w-full py-10 px-4">
+      <main className="flex-1 w-full py-10 px-4 pb-16">
         <div className="w-full max-w-6xl mx-auto">
           <div className="w-full px-0 md:px-0">
             <div
-              className="flex flex-col md:flex-row md:items-end md:justify-between mb-10 gap-4 w-full bg-bolt-elements-background-depth-2 rounded-lg shadow-lg border-0 p-6 md:p-10 transition-all duration-200 relative"
+              className="flex flex-col md:flex-row md:items-end md:justify-between mb-4 gap-4 w-full bg-bolt-elements-background-depth-2 rounded-lg shadow-lg border-0 p-6 md:p-8 transition-all duration-200 relative"
               style={{
                 minHeight: '110px',
                 width: '100%',
@@ -95,6 +95,7 @@ export default function Index() {
                 marginRight: 0,
                 left: 'unset',
                 right: 'unset',
+                paddingBottom: '0.5rem', // further reduce bottom padding
               }}
             >
               <div className="flex-1 min-w-0 flex flex-col justify-center">

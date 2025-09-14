@@ -3,6 +3,7 @@ import { Header } from '~/components/header/Header';
 import { ClientOnly } from 'remix-utils/client-only';
 import { ChallengeChat as ChallengeChatFallback } from '~/components/chat/ChallengeChat';
 import { ChallengeChatClient } from '~/components/chat/ChallengeChat.client';
+import { useState } from 'react';
 
 export default function ChallengeCounter() {
   const location = useLocation();
@@ -14,6 +15,19 @@ export default function ChallengeCounter() {
     question: '',
     image: image || '',
     difficulty: difficulty || 'Easy',
+  };
+
+  // Add solved state
+  const [solved, setSolved] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem(`solved-${challenge.id}`) === 'true';
+    }
+    return false;
+  });
+
+  const handleSubmit = () => {
+    localStorage.setItem(`solved-${challenge.id}`,'true');
+    setSolved(true);
   };
 
   return (
@@ -39,6 +53,18 @@ export default function ChallengeCounter() {
               >
                 {difficulty}
               </span>
+            )}
+            {/* Submit Button */}
+            {!solved && (
+              <button
+                className="mt-4 px-6 py-2 bg-green-600 text-white rounded-lg font-bold text-lg shadow hover:bg-green-700 transition"
+                onClick={handleSubmit}
+              >
+                Submit
+              </button>
+            )}
+            {solved && (
+              <span className="mt-4 px-6 py-2 bg-green-900 text-white rounded-lg font-bold text-lg shadow">Submitted!</span>
             )}
           </div>
         )}

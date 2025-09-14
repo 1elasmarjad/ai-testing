@@ -5,63 +5,18 @@ import { Chat } from '~/components/chat/Chat.client';
 import { Header } from '~/components/header/Header';
 import React, { useState } from 'react';
 import { ChallengeCard } from '~/components/challenge/ChallengeCard';
-import { useNavigate } from '@remix-run/react';
+import { useNavigate, useLoaderData } from '@remix-run/react';
+import challengesData from '../../data/challenges.json';
 
 type Challenge = {
   id: string;
   title: string;
   image: string;
   difficulty: 'Easy' | 'Medium' | 'Hard';
-  averageAccuracy: number;
-  description?: string;
+  question: string;
+  averageAccuracy?: number;
 };
 
-const challenges: Challenge[] = [
-  {
-    id: '1',
-    title: 'Sales Dashboard',
-    image: '/sales-dashboard.png',
-    difficulty: 'Hard',
-    averageAccuracy: 62,
-  },
-  {
-    id: '2',
-    title: 'Login Box',
-    image: '/login.png',
-    difficulty: 'Medium',
-    averageAccuracy: 91,
-  },
-  {
-    id: '3',
-    title: 'Google Drive',
-    image: '/Folders.png',
-    difficulty: 'Medium',
-    averageAccuracy: 87,
-  },
-  {
-    id: '4',
-    title: 'Profile Page',
-    image: '/profile.jpg',
-    difficulty: 'Hard',
-    averageAccuracy: 74,
-    description: 'Determine whether an integer is a palindrome.',
-  },
-  {
-    id: '5',
-    title: 'Counter',
-    image: '/counter.gif',
-    difficulty: 'Easy',
-    averageAccuracy: 68,
-  },
-  {
-    id: '6',
-    title: 'Weather Forecast',
-    image: '/weather-app.png',
-    difficulty: 'Medium',
-    averageAccuracy: 41,
-    description: 'Place N queens on an N×N chessboard so that no two queens threaten each other.',
-  },
-] as const;
 
 const difficultyOptions = ['All', 'Easy', 'Medium', 'Hard'] as const;
 const sortOptions = [
@@ -73,10 +28,13 @@ export const meta: MetaFunction = () => {
   return [{ title: 'Bolt' }, { name: 'description', content: 'Talk with Bolt, an AI assistant from StackBlitz' }];
 };
 
-export const loader = () => json({});
+export const loader = () => {
+  return json({ challenges: challengesData });
+};
 
 export default function Index() {
   const navigate = useNavigate();
+  const { challenges } = useLoaderData<typeof loader>();
   const [difficulty, setDifficulty] = useState<'All' | 'Easy' | 'Medium' | 'Hard'>('All');
   const [sort, setSort] = useState<'title' | 'difficulty'>('title');
   const [search, setSearch] = useState('');
@@ -85,7 +43,7 @@ export default function Index() {
     (c) =>
       (difficulty === 'All' || c.difficulty === difficulty) &&
       (c.title.toLowerCase().includes(search.toLowerCase()) ||
-        (c.description && c.description.toLowerCase().includes(search.toLowerCase()))),
+        c.question.toLowerCase().includes(search.toLowerCase())),
   );
   const sorted = [...filtered].sort((a, b) => {
     if (sort === 'title') {
@@ -183,7 +141,7 @@ export default function Index() {
                 key={challenge.id}
                 {...challenge}
                 onClick={() =>
-                  navigate('/challenge/counter', {
+                  navigate(`/challenge/${challenge.id}`, {
                     state: {
                       image: challenge.image,
                       title: challenge.title,

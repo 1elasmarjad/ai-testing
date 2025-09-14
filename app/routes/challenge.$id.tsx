@@ -31,26 +31,37 @@ export default function Challenge() {
   const { challenge } = useLoaderData<typeof loader>();
 
   return (
-    <div className="flex flex-col h-full w-full">
-      <Header />
-      <div className="max-w-2xl mx-auto w-full mt-8 mb-4 p-6 bg-bolt-elements-background-depth-2 rounded-xl shadow-lg flex flex-col items-center">
-        <img src={challenge.image} alt={challenge.title} className="h-32 w-auto mb-4 rounded-lg shadow" />
-        <h1 className="text-3xl font-bold text-bolt-elements-accent mb-2 text-center">{challenge.title}</h1>
-        <span
-          className={`text-lg font-semibold mb-4 ${
-            challenge.difficulty === 'Easy'
-              ? 'text-green-500'
-              : challenge.difficulty === 'Medium'
-                ? 'text-yellow-500'
-                : 'text-red-500'
-          }`}
-        >
-          {challenge.difficulty}
-        </span>
+    <div className="flex flex-col h-full min-h-screen w-full bg-bolt-elements-background-depth-1">
+      <Header className="bg-bolt-elements-background-depth-2 shadow-md" />
+      <div className="flex flex-col items-center justify-center w-full max-w-3xl mx-auto mt-12 mb-0 p-0">
+        {challenge.image && (
+          <div className="w-full flex flex-col items-center justify-center mb-0">
+            <img
+              src={challenge.image}
+              alt={challenge.title}
+              className="h-[280px] w-auto max-w-full rounded-2xl shadow-2xl border-4 border-bolt-elements-background-depth-2 object-contain bg-bolt-elements-background-depth-1"
+              style={{ objectFit: 'contain' }}
+            />
+            {challenge.title && (
+              <h1 className="text-4xl font-extrabold text-white pt-4 mb-0 text-center drop-shadow-lg tracking-tight">
+                {challenge.title}
+              </h1>
+            )}
+            {challenge.difficulty && (
+              <span
+                className={`text-xs font-semibold mt-1 mb-2 opacity-60 ${challenge.difficulty === 'Easy' ? 'text-green-400' : challenge.difficulty === 'Medium' ? 'text-yellow-400' : 'text-red-400'}`}
+              >
+                {challenge.difficulty}
+              </span>
+            )}
+          </div>
+        )}
       </div>
-      <ClientOnly fallback={<ChallengeChatFallback challenge={challenge} />}>
-        {() => <ChallengeChatClient challenge={challenge} />}
-      </ClientOnly>
+      <div className="w-full max-w-3xl mx-auto flex-1 flex flex-col justify-start pb-10">
+        <ClientOnly fallback={<ChallengeChatFallback challenge={challenge} />}>
+          {() => <ChallengeChatClient challenge={challenge} />}
+        </ClientOnly>
+      </div>
     </div>
   );
 }

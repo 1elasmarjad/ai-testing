@@ -1,16 +1,46 @@
 [
   {
-    "id": "counter",
-    "title": "Build a Counter",
-    "question": "Make a click counter with +, -, and reset buttons. The value must never go below 0.",
-    "image": "/counter.gif",
-    "difficulty": "Easy"
+    "id": "sales-dashboard",
+    "title": "Sales Dashboard",
+    "image": "/sales-dashboard.png",
+    "difficulty": "Hard",
+    "averageAccuracy": 62
   },
   {
-    "id": "todo",
-    "title": "Todo List",
-    "question": "Build a todo list with add and delete functionality.",
-    "image": "/todo.png",
-    "difficulty": "Medium"
+    "id": "login-box",
+    "title": "Login Box",
+    "image": "/login.png",
+    "difficulty": "Medium",
+    "averageAccuracy": 91
+  },
+  {
+    "id": "google-drive",
+    "title": "Google Drive",
+    "image": "/Folders.png",
+    "difficulty": "Medium",
+    "averageAccuracy": 87
+  },
+  {
+    "id": "profile-page",
+    "title": "Profile Page",
+    "image": "/profile.jpg",
+    "difficulty": "Hard",
+    "averageAccuracy": 74,
+    "description": "Determine whether an integer is a palindrome."
+  },
+  {
+    "id": "counter",
+    "title": "Counter",
+    "image": "/counter.gif",
+    "difficulty": "Easy",
+    "averageAccuracy": 68
+  },
+  {
+    "id": "weather-forecast",
+    "title": "Weather Forecast",
+    "image": "/weather-app.png",
+    "difficulty": "Medium",
+    "averageAccuracy": 41,
+    "description": "Place N queens on an N×N chessboard so that no two queens threaten each other."
   }
 ]

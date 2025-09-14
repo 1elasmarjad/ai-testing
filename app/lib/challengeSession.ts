@@ -1,19 +1,31 @@
 import { type Challenge } from './challenges';
+import { promptScoringService } from './promptScoring';
 
 interface ChallengeSession {
   challengeId: string;
   challenge: Challenge;
   timestamp: number;
+  proctoring?: {
+    isActive: boolean;
+    screenshotTaken: boolean;
+    startTime?: number;
+    endTime?: number;
+  };
 }
 
 const CHALLENGE_SESSION_KEY = 'bolt-challenge-context';
 
-export function setChallengeContext(challengeId: string, challenge: Challenge): void {
+export function setChallengeContext(challengeId: string, challenge: Challenge, proctoring?: { isActive: boolean }): void {
   try {
     const sessionData: ChallengeSession = {
       challengeId,
       challenge,
       timestamp: Date.now(),
+      proctoring: proctoring ? {
+        isActive: proctoring.isActive,
+        screenshotTaken: false,
+        startTime: proctoring.isActive ? Date.now() : undefined,
+      } : undefined,
     };
 
     sessionStorage.setItem(CHALLENGE_SESSION_KEY, JSON.stringify(sessionData));
@@ -56,4 +68,56 @@ export function clearChallengeContext(): void {
 
 export function hasChallengeContext(): boolean {
   return getChallengeContext() !== null;
+}
+
+export function updateProctoringStatus(screenshotTaken: boolean): void {
+  try {
+    const currentSession = getChallengeContext();
+    if (!currentSession) return;
+
+    const updatedSession: ChallengeSession = {
+      ...currentSession,
+      proctoring: currentSession.proctoring ? {
+        ...currentSession.proctoring,
+        screenshotTaken,
+        endTime: screenshotTaken ? Date.now() : currentSession.proctoring.endTime,
+      } : undefined,
+    };
+
+    sessionStorage.setItem(CHALLENGE_SESSION_KEY, JSON.stringify(updatedSession));
+  } catch (error) {
+    console.warn('Failed to update proctoring status in session storage:', error);
+  }
+}
+
+export function clearProctoringSession(): void {
+  try {
+    const currentSession = getChallengeContext();
+    if (!currentSession || !currentSession.proctoring) return;
+
+    const clearedSession: ChallengeSession = {
+      ...currentSession,
+      proctoring: {
+        ...currentSession.proctoring,
+        isActive: false,
+        endTime: Date.now(),
+      },
+    };
+
+    sessionStorage.setItem(CHALLENGE_SESSION_KEY, JSON.stringify(clearedSession));
+  } catch (error) {
+    console.warn('Failed to clear proctoring session in session storage:', error);
+  }
+}
+
+export function addPromptScore(challengeId: string, score: number): void {
+  promptScoringService.addPromptScore(challengeId, score);
+}
+
+export function getAveragePromptScore(challengeId: string): number {
+  return promptScoringService.getAveragePromptScore(challengeId);
+}
+
+export function clearPromptScores(challengeId: string): void {
+  promptScoringService.clearScores(challengeId);
 }

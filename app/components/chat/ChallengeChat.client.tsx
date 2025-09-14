@@ -9,7 +9,7 @@ import { useChatHistory } from '~/lib/persistence';
 import { chatStore } from '~/lib/stores/chat';
 import { workbenchStore } from '~/lib/stores/workbench';
 import { type Challenge } from '~/lib/challenges';
-import { setChallengeContext } from '~/lib/challengeSession';
+import { setChallengeContext, addPromptScore } from '~/lib/challengeSession';
 import { fileModificationsToHTML } from '~/utils/diff';
 import { cubicEasingFn } from '~/utils/easings';
 import { createScopedLogger, renderLogger } from '~/utils/logger';
@@ -220,6 +220,10 @@ export const ChallengeChatImpl = memo(({ challenge, initialMessages, storeMessag
       .then((data: any) => {
         const message = data.message || 'Prompt evaluated';
         const rating = data.rating || 3;
+
+        // Store the prompt score for this challenge
+        addPromptScore(challenge.id, rating);
+
         sendPromptStatusToast(message, rating, playSuccess, playFailure);
       })
       .catch((error) => {

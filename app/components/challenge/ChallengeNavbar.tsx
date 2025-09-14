@@ -3,6 +3,9 @@ import { useNavigate } from '@remix-run/react';
 import { BackToChallengesButton } from './BackToChallengesButton';
 import { ChallengeTimer } from './ChallengeTimer';
 import { SubmissionConfirmation } from './SubmissionConfirmation';
+import { getChallengeById } from '~/lib/challenges';
+import { proctoringService } from '~/lib/proctoring';
+import { getAveragePromptScore } from '~/lib/challengeSession';
 
 export function ChallengeNavbar({
   challenge,
@@ -18,21 +21,62 @@ export function ChallengeNavbar({
     onExpire?: () => void;
   };
   onSubmit?: () => void;
-  onPreSubmission?: () => void;
-  onSubmission?: () => void;
+  onPreSubmission?: () => Promise<void>;
+  onSubmission?: () => Promise<void>;
 }) {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const navigate = useNavigate();
 
-  const handlePreSubmission = () => {
+  const handlePreSubmission = async () => {
     if (onPreSubmission) {
-      onPreSubmission();
+      await onPreSubmission();
     }
   };
 
-  const handleSubmission = () => {
+  const handleSubmission = async () => {
+    let qualityScore = 50; // Default fallback score
+
+    try {
+      // Get the stored screenshot from proctoring service
+      const resultScreenshotBlob = proctoringService.getStoredScreenshotAsBlob();
+
+      if (resultScreenshotBlob && challenge?.id) {
+        // Get challenge data to access target image
+        const challengeData = await getChallengeById(challenge.id);
+
+        if (challengeData?.image) {
+          // Fetch the target image
+          const targetImageResponse = await fetch(challengeData.image);
+          const targetImageBlob = await targetImageResponse.blob();
+
+          // Prepare form data for API call
+          const formData = new FormData();
+          formData.append('targetScreenshot', targetImageBlob);
+          formData.append('resultScreenshot', resultScreenshotBlob);
+
+          // Call the grade-result API
+          const gradeResponse = await fetch('/api/grade-result', {
+            method: 'POST',
+            body: formData,
+          });
+
+          if (gradeResponse.ok) {
+            const gradeResult = await gradeResponse.json();
+            qualityScore = gradeResult.similarity || 50;
+            console.log('Grade result:', gradeResult);
+          } else {
+            console.error('Failed to grade result:', gradeResponse.statusText);
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error during grading process:', error);
+      // Use fallback score if anything fails
+    }
+
+    // Call parent onSubmission handler
     if (onSubmission) {
-      onSubmission();
+      await onSubmission();
     }
 
     console.log(`Challenge: ${JSON.stringify(challenge)}`);
@@ -43,13 +87,11 @@ export function ChallengeNavbar({
       window.dispatchEvent(new CustomEvent('challenge:submit', { detail: { id: challenge.id } }));
     }
 
-    // TODO get the users mark here
-    const promptScore = 5;
-    const qualityScore = 100;
-    const speedScore = 5;
+    // Get calculated average prompt score (rounded to 1 decimal place)
+    const promptScore = getAveragePromptScore(challenge.id);
 
-    // Redirect to landing page
-    navigate('/result?prompt_score=5&quality_score=100&speed_score=5');
+    // Redirect to landing page with real quality score and calculated prompt score
+    navigate(`/result?prompt_score=${promptScore}&quality_score=${qualityScore}`);
   };
 
   const handleSubmitClick = () => {

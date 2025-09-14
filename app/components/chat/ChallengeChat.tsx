@@ -88,7 +88,7 @@ export const ChallengeChat = React.forwardRef<HTMLDivElement, ChallengeChatProps
                 <div className="mb-4 text-bolt-elements-textSecondary space-y-2">
                   <hr className="my-6 border-t border-bolt-elements-borderColor w-1/2 mx-auto" />
                   <p className="text-sm font-medium text-bolt-elements-textTertiary mb-2">
-                    Your challenge timer will start right after the first prompt
+                    Your challenge timer has started!
                   </p>
                 </div>
               </div>

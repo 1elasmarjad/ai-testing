@@ -1,3 +1,5 @@
+import React from 'react';
+
 export type ChallengeCardProps = {
   id: string;
   title: string;
